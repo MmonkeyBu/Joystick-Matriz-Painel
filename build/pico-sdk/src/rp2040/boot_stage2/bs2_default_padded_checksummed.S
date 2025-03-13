@@ -1,4 +1,4 @@
-// Padded and checksummed version of: C:/Users/pdnv2/menu/build/pico-sdk/src/rp2040/boot_stage2/bs2_default.bin
+// Padded and checksummed version of: C:/Users/Elias/OneDrive/Documentos/Projeto BigDogLab/Joystick-Matriz-Painel/build/pico-sdk/src/rp2040/boot_stage2/bs2_default.bin
 
 .cpu cortex-m0plus
 .thumb

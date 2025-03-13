@@ -10,14 +10,15 @@
 
 // Definições
 #define NUM_OPTIONS_MAIN 2              // Número de opções no menu principal
-#define NUM_OPTIONS_SUB 3               // Número de opções no submenu
+#define NUM_OPTIONS_SUB_1 4               // Número de opções no submenu
+#define NUM_OPTIONS_SUB_2 3
 #define MENU_OPTION_SPACING 12          // Espaçamento vertical entre as opções
 #define MENU_CURSOR_POSITION 10         // Posição horizontal do cursor (seta ">")
 
 // Variáveis globais
 static const char *menu_options_main[NUM_OPTIONS_MAIN] = {"Joysticks", "Matrix de Leds"}; // Opções do menu principal
-static const char *menu_options_joysticks[NUM_OPTIONS_SUB] = {"Direcoes", "Porcentagens", "Gestos"}; // Submenu de Joysticks
-static const char *menu_options_matrix[NUM_OPTIONS_SUB] = {"Opção M1", "Opção M2", "Opção M3"}; // Submenu de Matrix de Leds
+static const char *menu_options_joysticks[NUM_OPTIONS_SUB_1] = {"Direcoes", "Porcentagens", "Gestos", "Voltar"}; // Submenu de Joysticks
+static const char *menu_options_matrix[NUM_OPTIONS_SUB_2] = {"Frase", "Animacao", "Voltar"}; // Submenu de Matrix de Leds
 static int selected_option = 0;         // Índice da opção selecionada
 static bool in_sub_menu = false;        // Indica se está no submenu
 static bool is_joysticks_selected = false; // Indica se o submenu de Joysticks está selecionado
@@ -62,13 +63,16 @@ void menu_update(int x, int y, bool estado_inverter) {
     // Depuração: imprime a direção detectada
     printf("Direção detectada: %d\n", dir);
 
+    // Define o número de opções com base no menu atual
+    int num_opcoes = in_sub_menu ? (is_joysticks_selected ? NUM_OPTIONS_SUB_1 : NUM_OPTIONS_SUB_2) : NUM_OPTIONS_MAIN;
+
     // Atualiza a opção selecionada com base na direção
     switch (dir) {
         case CIMA:
-            selected_option = (selected_option - 1 + (in_sub_menu ? NUM_OPTIONS_SUB : NUM_OPTIONS_MAIN)) % (in_sub_menu ? NUM_OPTIONS_SUB : NUM_OPTIONS_MAIN);  // Move para cima
+            selected_option = (selected_option - 1 + num_opcoes) % num_opcoes;  // Move para cima
             break;
         case BAIXO:
-            selected_option = (selected_option + 1) % (in_sub_menu ? NUM_OPTIONS_SUB : NUM_OPTIONS_MAIN);  // Move para baixo
+            selected_option = (selected_option + 1) % num_opcoes;  // Move para baixo
             break;
         case ESQUERDA:
             // Adicione lógica para a direção ESQUERDA, se necessário
@@ -93,9 +97,9 @@ void menu_update(int x, int y, bool estado_inverter) {
     // Redesenha o menu atual
     if (in_sub_menu) {
         if (is_joysticks_selected) {
-            menu_draw(menu_options_joysticks, NUM_OPTIONS_SUB);  // Desenha o submenu de Joysticks
+            menu_draw(menu_options_joysticks, NUM_OPTIONS_SUB_1);  // Desenha o submenu de Joysticks
         } else {
-            menu_draw(menu_options_matrix, NUM_OPTIONS_SUB);  // Desenha o submenu de Matrix de Leds
+            menu_draw(menu_options_matrix, NUM_OPTIONS_SUB_2);  // Desenha o submenu de Matrix de Leds
         }
     } else {
         menu_draw(menu_options_main, NUM_OPTIONS_MAIN);  // Desenha o menu principal
@@ -104,9 +108,18 @@ void menu_update(int x, int y, bool estado_inverter) {
 
 void menu_handle_button_a() {
     if (in_sub_menu) {
-        // Se estiver no submenu, volta ao menu principal
-        in_sub_menu = false;
-        menu_draw(menu_options_main, NUM_OPTIONS_MAIN);
+        // Verifica se a opção "Voltar" foi selecionada
+        if ((is_joysticks_selected && strcmp(menu_options_joysticks[selected_option], "Voltar") == 0) ||
+            (!is_joysticks_selected && strcmp(menu_options_matrix[selected_option], "Voltar") == 0)) {
+            in_sub_menu = false; // Volta ao menu principal
+            selected_option = 0; // Reseta a seleção para a primeira opção
+            menu_draw(menu_options_main, NUM_OPTIONS_MAIN);
+            printf("Voltando ao menu principal...\n");
+        } else {
+            // Outras opções não fazem nada por enquanto
+            printf("Opção selecionada: %s\n", 
+                   is_joysticks_selected ? menu_options_joysticks[selected_option] : menu_options_matrix[selected_option]);
+        }
     } else {
         // Se estiver no menu principal, entra no submenu correspondente
         in_sub_menu = true;
@@ -122,11 +135,11 @@ void menu_handle_button_a() {
             if (strcmp(selected_option_text, "Joysticks") == 0) {
                 is_joysticks_selected = true;  // Entra no submenu de Joysticks
                 printf("Submenu de Joysticks selecionado\n");
-                menu_draw(menu_options_joysticks, NUM_OPTIONS_SUB);
+                menu_draw(menu_options_joysticks, NUM_OPTIONS_SUB_1);
             } else if (strcmp(selected_option_text, "Matrix de Leds") == 0) {
                 is_joysticks_selected = false;  // Entra no submenu de Matrix de Leds
                 printf("Submenu de Matrix de Leds selecionado\n");
-                menu_draw(menu_options_matrix, NUM_OPTIONS_SUB);
+                menu_draw(menu_options_matrix, NUM_OPTIONS_SUB_2);
             } else {
                 printf("Opção desconhecida selecionada\n");
             }

@@ -81,11 +81,11 @@ int main() {
 
     // Define a intensidade dos LEDs (0.0 a 1.0)
     double intensidade = 0.1; // Controle da intensidade (0.0 até 1.0)
-    uint16_t vel = 150;       // Taxa de atualizações em ms
+    uint16_t vel = 100;       // Taxa de atualizações em ms
     uint8_t largura_fonte = 5; // Tamanho da fonte (3 ou 5)
 
     // Exibe uma frase com efeito de rolagem na matriz de LEDs
-    exibir_frase_rolagem("CARLOS VIADO", cor, pio, sm, intensidade, vel, largura_fonte);
+    exibir_frase_rolagem("OLA MUNDO!", cor, pio, sm, intensidade, vel, largura_fonte);
 
     // Loop infinito
     while (1) {
