@@ -1,17 +1,17 @@
-#include "pico/bootrom.h"//configuração para teste do bootseel :P
+#include "pico/bootrom.h"  // Configuração para teste do bootsel
 #include "pico/stdlib.h"
 #include "botao_joystick.h"
 #include "menu.h"
-
-
-// Protótipos das funções
-void botao_callback(uint gpio, uint32_t eventos);
-void botao_init(uint8_t pino);
 
 // Variáveis para debounce
 static volatile uint32_t ultima_interrupcao_a = 0;
 static volatile uint32_t ultima_interrupcao_b = 0;
 static volatile uint32_t ultima_interrupcao_joystick = 0;
+
+// Variáveis globais para armazenar os valores de x e y do joystick
+extern int x;  // Declarado em outro arquivo (por exemplo, main.c)
+extern int y;  // Declarado em outro arquivo (por exemplo, main.c)
+extern volatile bool estado_inverter;  // Declarado em outro arquivo (por exemplo, main.c)
 
 // Função de callback para tratar interrupções dos botões
 void botao_callback(uint gpio, uint32_t eventos) {
@@ -40,7 +40,8 @@ void botao_callback(uint gpio, uint32_t eventos) {
             if (tempo_atual - ultima_interrupcao_a > DEBOUNCE_TIME) {
                 ultima_interrupcao_a = tempo_atual;
                 if (eventos & GPIO_IRQ_EDGE_FALL) {
-                    menu_handle_button_a(); // Alterna entre o menu principal e o submenu
+                    // Chama a função menu_handle_button_a com os valores de x, y e estado_inverter
+                    menu_handle_button_a(x, y, estado_inverter);
                 }
             }
             break;
