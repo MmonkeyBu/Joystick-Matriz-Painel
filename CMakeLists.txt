@@ -43,6 +43,12 @@ set(SOURCES
     ssd1306.c
     ssd1306_fonts.c
     menu.c
+    main_pio.c
+    frames_3x5.c
+    frames_5x5.c
+    letras_3x5.c
+    letras_5x5.c
+    led_functions.c
 )
 
 # Adiciona o executável com todos os arquivos de código-fonte
