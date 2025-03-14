@@ -1,6 +1,5 @@
 #include "direcao.h"
 #include "botao_joystick.h"
-#include "botao_joystick.h"
 #include "hardware/adc.h"
 
 volatile bool estado_inverter = false;

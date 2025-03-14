@@ -3,7 +3,6 @@
 #include "pico/stdlib.h"
 #include "hardware/clocks.h"
 #include "pico/bootrom.h"
-#include "main.pio.h"
 #include "init_GPIO.h"
 #include "frames_5x5.h"
 #include "frames_3x5.h"
@@ -14,6 +13,11 @@
 #include "direcao.h"
 #include "hardware/adc.h"
 #include "menu.h"
+#include "main.pio.h"
+
+// Variáveis do PIO e sm
+PIO pio;
+uint sm, offset;
 
 /**
  * Inicializa o sistema, configurando o clock e a PIO.
@@ -55,8 +59,10 @@ int main() {
     adc_gpio_init(26); // init ADC pin 26
     adc_gpio_init(27); // init ADC pin 27
 
-    // Inicia a tela
-    menu_init();
+    // Inicializa o sistema (clock e PIO)
+    if (!inicializar_sistema(&pio, &sm, &offset)) {
+        return 1; // Encerra o programa se a inicialização falhar
+    }
 
     // Inicia o botão joystick para inversão de eixo
     botao_init(JSTICK);
@@ -64,28 +70,11 @@ int main() {
     botao_init(BOTAO_B);
     botao_init(BOTAO_A);
 
-    // Variáveis para PIO
-    PIO pio;
-    uint sm, offset;
-
-    // Inicializa o sistema (clock e PIO)
-    if (!inicializar_sistema(&pio, &sm, &offset)) {
-        return 1; // Encerra o programa se a inicialização falhar
-    }
-
     // Define a cor (R, G, B - 0 à 255)
     RGBColor cor = {200, 0, 50}; // Cor personalizada (R=219, G=0, B=91)
 
-    // Variável de controle qualquer (não utilizada no momento)
-    uint32_t cont = 0;
-
-    // Define a intensidade dos LEDs (0.0 a 1.0)
-    double intensidade = 0.1; // Controle da intensidade (0.0 até 1.0)
-    uint16_t vel = 100;       // Taxa de atualizações em ms
-    uint8_t largura_fonte = 5; // Tamanho da fonte (3 ou 5)
-
-    // Exibe uma frase com efeito de rolagem na matriz de LEDs
-    exibir_frase_rolagem("OLA MUNDO!", cor, pio, sm, intensidade, vel, largura_fonte);
+    // Inicia a tela
+    menu_init();
 
     // Loop infinito
     while (1) {
@@ -95,12 +84,24 @@ int main() {
         adc_select_input(1);
         int x = adc_read();  // Lê o valor do eixo X (pino 27)
 
-        // Funções do Joystick
-        
-        //print_direction(x, y, estado_inverter);  // Imprime a direção no console
-        menu_update(x, y, false);               // Atualiza o menu com base na direção
-        //detectar_gesto(x, y);                 // Detecta gestos (se necessário)
-        //porcentagem(x, y);                    // Exibe a porcentagem dos eixos (se necessário)
+        // Atualiza o menu ou executa a função correspondente ao estado atual
+        switch (estado_atual) {
+            case ESTADO_MENU_PRINCIPAL:
+            case ESTADO_MENU_MATRIX:
+                menu_update(x, y, false); // Atualiza o menu com base na direção
+                break;
+            case ESTADO_EXIBIR_FRASE:
+                display_frase(); // Exibe a frase
+                estado_atual = ESTADO_MENU_MATRIX; // Volta ao submenu após exibir a frase
+                break;
+            case ESTADO_EXIBIR_ANIMACAO:
+                display_animacao(); // Exibe a animação
+                estado_atual = ESTADO_MENU_MATRIX; // Volta ao submenu após exibir a animação
+                break;
+            case ESTADO_AJUSTAR_BRILHO:
+                ajustar_intensidade_leds(x, y); // Ajusta o brilho
+                break;
+        }
 
         sleep_ms(120);  // Adiciona um pequeno delay para evitar leituras excessivas
     }

@@ -5,37 +5,10 @@
 
 #define NUM_LEDS 25
 
-double f_01[NUM_LEDS] = // completamente apagado
-    {
-        0.0, 0.0, 0.0, 0.0, 0.0,
-        0.0, 0.0, 0.0, 0.0, 0.0,
-        0.0, 0.0, 0.0, 0.0, 0.0,
-        0.0, 0.0, 0.0, 0.0, 0.0,
-        0.0, 0.0, 0.0, 0.0, 0.0};
-
-double f_02[NUM_LEDS] = // todos acesos
-    {
-        1.0, 1.0, 1.0, 1.0, 1.0,
-        1.0, 1.0, 1.0, 1.0, 1.0,
-        1.0, 1.0, 1.0, 1.0, 1.0,
-        1.0, 1.0, 1.0, 1.0, 1.0,
-        1.0, 1.0, 1.0, 1.0, 1.0};
-
-
-double heart_01[NUM_LEDS] = {
-    0.0, 0.0, 0.0, 0.0, 0.0, // Linha 1
-    0.0, 1.0, 0.0, 1.0, 0.0, // Linha 2
-    0.0, 1.0, 1.0, 1.0, 0.0, // Linha 3
-    0.0, 0.0, 1.0, 0.0, 0.0, // Linha 4
-    0.0, 0.0, 0.0, 0.0, 0.0  // Linha 5
-};
-
-double heart_02[NUM_LEDS] = {
-    0.0, 1.0, 0.0, 1.0, 0.0, // Linha 1
-    1.0, 1.0, 1.0, 1.0, 1.0, // Linha 2
-    1.0, 1.0, 1.0, 1.0, 1.0, // Linha 3
-    0.0, 1.0, 1.0, 1.0, 0.0, // Linha 4
-    0.0, 0.0, 1.0, 0.0, 0.0 // Linha 5
-};
+// Declarações das variáveis como extern
+extern double f_01[NUM_LEDS];
+extern double f_02[NUM_LEDS];
+extern double heart_01[NUM_LEDS];
+extern double heart_02[NUM_LEDS];
 
 #endif
