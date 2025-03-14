@@ -140,5 +140,5 @@ BitDogLab: Pelo suporte e recursos para desenvolvimento.
 
 Colega de Trabalho: Pela biblioteca do joystick.
 
-Feito com ❤️ por [Seu Nome].
-📧 Contato: seu-email@example.com
+Feito por Pablo Daniel e Carlos Elias.
+📧 Contato: pablo.vieira@academico.ifpb.edu.br
