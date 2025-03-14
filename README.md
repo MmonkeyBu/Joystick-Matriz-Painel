@@ -125,6 +125,7 @@ cp projeto.uf2 /media/seu-usuario/RPI-RP2/
 - **direcao.c:** Implementa a leitura dos eixos do joystick e detecção de gestos.
 - **led_functions.c:** Contém funções para controle da matriz de LEDs, incluindo exibição de frames, animações e frases.
 - **frames_*.c:** Contém os frames para exibição na matriz de LEDs.
+- **ssd1306_*.c:** Contém funções relacionadas ao painel OLED da placa.
 - **letras_*.c:** Contém os frames das letras para exibição de frases.
 
 
