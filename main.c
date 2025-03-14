@@ -3,7 +3,6 @@
 #include "pico/stdlib.h"
 #include "hardware/clocks.h"
 #include "pico/bootrom.h"
-#include "main.pio.h"
 #include "init_GPIO.h"
 #include "frames_5x5.h"
 #include "frames_3x5.h"
@@ -14,6 +13,11 @@
 #include "direcao.h"
 #include "hardware/adc.h"
 #include "menu.h"
+#include "main.pio.h"
+
+// Variáveis do PIO e sm
+PIO pio;
+uint sm, offset;
 
 /**
  * Inicializa o sistema, configurando o clock e a PIO.
@@ -55,8 +59,10 @@ int main() {
     adc_gpio_init(26); // init ADC pin 26
     adc_gpio_init(27); // init ADC pin 27
 
-    // Inicia a tela
-    menu_init();
+    // Inicializa o sistema (clock e PIO)
+    if (!inicializar_sistema(&pio, &sm, &offset)) {
+        return 1; // Encerra o programa se a inicialização falhar
+    }
 
     // Inicia o botão joystick para inversão de eixo
     botao_init(JSTICK);
@@ -64,14 +70,6 @@ int main() {
     botao_init(BOTAO_B);
     botao_init(BOTAO_A);
 
-    // Variáveis para PIO
-    PIO pio;
-    uint sm, offset;
-
-    // Inicializa o sistema (clock e PIO)
-    if (!inicializar_sistema(&pio, &sm, &offset)) {
-        return 1; // Encerra o programa se a inicialização falhar
-    }
 
     // Define a cor (R, G, B - 0 à 255)
     RGBColor cor = {200, 0, 50}; // Cor personalizada (R=219, G=0, B=91)
@@ -81,11 +79,31 @@ int main() {
 
     // Define a intensidade dos LEDs (0.0 a 1.0)
     double intensidade = 0.1; // Controle da intensidade (0.0 até 1.0)
-    uint16_t vel = 100;       // Taxa de atualizações em ms
+    uint16_t vel = 400;       // Taxa de atualizações em ms
     uint8_t largura_fonte = 5; // Tamanho da fonte (3 ou 5)
 
     // Exibe uma frase com efeito de rolagem na matriz de LEDs
-    exibir_frase_rolagem("OLA MUNDO!", cor, pio, sm, intensidade, vel, largura_fonte);
+    display_frase();
+
+
+    // animaçãozinha de coração batendo
+    while (cont < 5) {
+        exibir_frame(heart_01, cor, pio, sm, intensidade);
+        sleep_ms(vel);
+        exibir_frame(heart_02, cor, pio, sm, intensidade);
+        sleep_ms(vel);
+
+        if (!gpio_get(BOTAO_A)) {
+            printf("Botão A pressionado, saindo da animação...\n");
+            break;
+        }
+        cont++;
+    }
+    
+    exibir_frame(f_01, cor, pio, sm, intensidade);
+
+    // Inicia a tela
+    menu_init();
 
     // Loop infinito
     while (1) {
