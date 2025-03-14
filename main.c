@@ -3,7 +3,6 @@
 #include "pico/stdlib.h"
 #include "hardware/clocks.h"
 #include "pico/bootrom.h"
-#include "main.pio.h"
 #include "init_GPIO.h"
 #include "frames_5x5.h"
 #include "frames_3x5.h"
@@ -14,6 +13,11 @@
 #include "direcao.h"
 #include "hardware/adc.h"
 #include "menu.h"
+#include "main.pio.h"
+
+// Variáveis do PIO e sm
+PIO pio;
+uint sm, offset;
 
 /**
  * Inicializa o sistema, configurando o clock e a PIO.
@@ -49,11 +53,17 @@ bool inicializar_sistema(PIO *pio, uint *sm, uint *offset) {
  * Inicializa o sistema, exibe animações e texto na matriz de LEDs.
  */
 int main() {
+
     // Inicializa o stdio (para debug via USB, se necessário)
     stdio_init_all();
     adc_init();
     adc_gpio_init(26); // init ADC pin 26
     adc_gpio_init(27); // init ADC pin 27
+
+    // Inicializa o sistema (clock e PIO)
+    if (!inicializar_sistema(&pio, &sm, &offset)) {
+        return 1; // Encerra o programa se a inicialização falhar
+    }
 
     // Inicia a tela
     menu_init();
@@ -64,14 +74,6 @@ int main() {
     botao_init(BOTAO_B);
     botao_init(BOTAO_A);
 
-    // Variáveis para PIO
-    PIO pio;
-    uint sm, offset;
-
-    // Inicializa o sistema (clock e PIO)
-    if (!inicializar_sistema(&pio, &sm, &offset)) {
-        return 1; // Encerra o programa se a inicialização falhar
-    }
 
     // Define a cor (R, G, B - 0 à 255)
     RGBColor cor = {200, 0, 50}; // Cor personalizada (R=219, G=0, B=91)
@@ -85,7 +87,7 @@ int main() {
     uint8_t largura_fonte = 5; // Tamanho da fonte (3 ou 5)
 
     // Exibe uma frase com efeito de rolagem na matriz de LEDs
-    exibir_frase_rolagem("OLA MUNDO!", cor, pio, sm, intensidade, vel, largura_fonte);
+    display_frase();
 
     // Loop infinito
     while (1) {
