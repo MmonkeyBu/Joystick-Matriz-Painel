@@ -94,44 +94,39 @@ make
 cp projeto.uf2 /media/seu-usuario/RPI-RP2/
 ```
 ## 🎮 Como Usar
-Navegação no Menu:
 
-Use o joystick para navegar entre as opções do menu.
+**Navegação no Menu:**
 
-Pressione o Botão A para selecionar uma opção.
+- Use o joystick para navegar entre as opções do menu.
+- Pressione o Botão A para selecionar uma opção.
+- Pressione o Botão do Joystick para inverter os eixos X e Y.
 
-Pressione o Botão do Joystick para inverter os eixos X e Y.
+**Exibição de Frases:**
 
-Exibição de Frases:
+- No submenu "Matrix de Leds", selecione "Frase" para exibir uma frase com efeito de rolagem.
 
-No submenu "Matrix de Leds", selecione "Frase" para exibir uma frase com efeito de rolagem.
+**Reprodução de Animação:**
 
-Reprodução de Animação:
+- No submenu "Matrix de Leds", selecione "Animação" para reproduzir uma animação na matriz de LEDs.
 
-No submenu "Matrix de Leds", selecione "Animação" para reproduzir uma animação na matriz de LEDs.
+**Ajuste de Brilho:**
 
-Ajuste de Brilho:
+- No submenu "Matrix de Leds", selecione "Ajustar Brilho" e use o joystick para ajustar o brilho dos LEDs.
 
-No submenu "Matrix de Leds", selecione "Ajustar Brilho" e use o joystick para ajustar o brilho dos LEDs.
+**Detecção de Gestos:**
 
-Detecção de Gestos:
+- No submenu "Joysticks", selecione "Gestos" e movimente o joystick para detectar gestos como "Volta Completa" e "Meia Lua".
 
-No submenu "Joysticks", selecione "Gestos" e movimente o joystick para detectar gestos como "Volta Completa" e "Meia Lua".
+## 📂 Estrutura do Projeto
 
-📂 Estrutura do Projeto
-main.c: Contém a lógica principal do programa, inicialização do sistema e loop infinito.
+- **main.c:** Contém a lógica principal do programa, inicialização do sistema e loop infinito.
+- **menu.c:** Implementa a navegação no menu e exibição no display OLED.
+- **botao_joystick.c:** Controla os botões e o joystick.
+- **direcao.c:** Implementa a leitura dos eixos do joystick e detecção de gestos.
+- **led_functions.c:** Contém funções para controle da matriz de LEDs, incluindo exibição de frames, animações e frases.
+- **frames_*.c:** Contém os frames para exibição na matriz de LEDs.
+- **letras_*.c:** Contém os frames das letras para exibição de frases.
 
-menu.c: Implementa a navegação no menu e exibição no display OLED.
-
-botao_joystick.c: Controla os botões e o joystick.
-
-direcao.c: Implementa a leitura dos eixos do joystick e detecção de gestos.
-
-led_functions.c: Contém funções para controle da matriz de LEDs, incluindo exibição de frames, animações e frases.
-
-frames_*.c: Contém os frames para exibição na matriz de LEDs.
-
-letras_*.c: Contém os frames das letras para exibição de frases.
 
 📝 Licença
 Este projeto está licenciado sob a licença MIT. Consulte o arquivo LICENSE para mais detalhes.
