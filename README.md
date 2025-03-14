@@ -66,13 +66,13 @@ Siga os passos abaixo para instalar e rodar o projeto localmente:
 
 1. Clone o repositório:
 ```bash
-git clone https://github.com/seu-usuario/nome-do-repositorio.git
+git clone https://github.com/seu-usuario/nome-do-repositorio.git](https://github.com/MmonkeyBu/Joystick-Matriz-Painel.git)
 ```
 
 2. Acesse a pasta do projeto:
 
 ```
-cd nome-do-repositorio
+cd Joystick-Matriz-Painel
 ```
 
 3. Configure o ambiente de compilação:
@@ -81,6 +81,7 @@ cd nome-do-repositorio
 mkdir build
 cd build
 cmake ..
+(Ou usar a propria ferramenta Raspberry)
 ```
 
 4. Compile o projeto:
