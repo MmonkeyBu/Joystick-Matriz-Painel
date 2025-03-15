@@ -8,7 +8,7 @@
 #include <string.h>
 
 // Definições
-#define NUM_OPTIONS_MAIN 2              // Número de opções no menu principal
+#define NUM_OPTIONS_MAIN 3              // Número de opções no menu principal (agora com 3 opções)
 #define NUM_OPTIONS_SUB_1 4             // Número de opções no submenu
 #define NUM_OPTIONS_SUB_2 4             // Número de opções no submenu da matriz de LEDs (agora com 4 opções)
 #define MENU_OPTION_SPACING 12          // Espaçamento vertical entre as opções
@@ -21,7 +21,7 @@ int y = 0;
 static bool exibindo_funcao = false; // Controla se o sistema está exibindo uma função
 
 // Variáveis globais
-static const char *menu_options_main[NUM_OPTIONS_MAIN] = {"Joysticks", "Matrix de Leds"}; // Opções do menu principal
+static const char *menu_options_main[NUM_OPTIONS_MAIN] = {"Joysticks", "Matrix de Leds", "Testes Automatizados"}; // Opções do menu principal
 static const char *menu_options_joysticks[NUM_OPTIONS_SUB_1] = {"Direcoes", "Porcentagens", "Gestos", "Voltar"}; // Submenu de Joysticks
 static const char *menu_options_matrix[NUM_OPTIONS_SUB_2] = {"Frase", "Animacao", "Ajustar Brilho", "Voltar"}; // Submenu de Matrix de Leds (nova opção)
 static int selected_option = 0;         // Índice da opção selecionada
@@ -71,28 +71,36 @@ void menu_update(int x, int y, bool estado_inverter) {
             switch (selected_option) {
                 case 0: // Direcoes
                     display_directions(x, y, estado_inverter);
+                    printf("Printando direcoes:");
                     break;
                 case 1: // Porcentagens
                     display_percentages(x, y);
+                    printf("Printando porcentagem:");
                     break;
                 case 2: // Gestos
                     display_gestures(x, y);
+                    printf("Printando Gestos:");
                     break;
                 default:
+                    printf("Saindo do joystick");
                     break;
             }
         } else {
             switch (selected_option) {
                 case 0: // Frase
                     display_frase();
+                    printf("entrando Frases:");
                     break;
                 case 1: // Animacao
                     display_animacao();
+                    printf("entrando Animacao:");
                     break;
                 case 2: // Ajustar Brilho
                     ajustar_intensidade_leds(x, y);
+                    printf("entrando Intensidade:");
                     break;
                 default:
+                    printf("saindo do menu");
                     break;
             }
         }
@@ -140,11 +148,14 @@ void menu_update(int x, int y, bool estado_inverter) {
     if (in_sub_menu) {
         if (is_joysticks_selected) {
             menu_draw(menu_options_joysticks, NUM_OPTIONS_SUB_1);
+            printf("Submenu-1");
         } else {
             menu_draw(menu_options_matrix, NUM_OPTIONS_SUB_2);
+            printf("Submenu-2");
         }
     } else {
         menu_draw(menu_options_main, NUM_OPTIONS_MAIN);
+        printf("Menu Main");
     }
 }
 
@@ -155,9 +166,11 @@ void ajustar_intensidade_leds(int x, int y) {
     // Ajusta a intensidade com base no eixo Y do joystick
     if (x > MID + DEADZONE) {
         intensidade += intensidade < 1.0 ? 0.01 : 0.0; // Aumenta a intensidade
+        printf("Aumentando intensidade led");
         if (intensidade > 1.0) intensidade = 1.0; // Limita o valor máximo
     } else if (x < MID - DEADZONE) {
         intensidade -= intensidade > 0.01 ? 0.01 : 0.0; // Diminui a intensidade
+        printf("Diminuindo intensidade led");
     }
 
     // Exibe a intensidade atual no OLED
@@ -170,11 +183,15 @@ void ajustar_intensidade_leds(int x, int y) {
 
     // Exibe o frame f_02 (todos os LEDs acesos) com a intensidade ajustada
     exibir_frame(f_02, cor, pio, sm, intensidade);
+    printf("exibindo intensidade atual");
 }
 
 // Função para exibir uma frase na matriz de LEDs
 void display_frase() {
     printf("Exibindo frase...\n");
+    ssd1306_Fill(Black);
+    ssd1306_SetCursor(10, 10);
+    ssd1306_WriteString("mostrando Frase", Font_7x10, White);
     const char *frase = "OI";
     RGBColor cor = {200, 0, 50};
     double intensidade = 0.1;
@@ -186,6 +203,9 @@ void display_frase() {
 
 void display_animacao() {
     printf("Exibindo animação...\n");
+    ssd1306_Fill(Black);
+    ssd1306_SetCursor(10, 10);
+    ssd1306_WriteString("mostrando animação", Font_7x10, White);
     RGBColor cor = {200, 0, 50};
     double intensidade = 0.1;
     int velocidade = 500, cont = 0;
@@ -206,6 +226,40 @@ void display_animacao() {
     exibir_frame(f_01, cor, pio, sm, intensidade);
 }
 
+// Função para exibir os gestos no OLED
+void display_gestures(int x, int y) {
+    ssd1306_Fill(Black);  // Limpa o display
+
+    // Detecta o gesto
+    detectar_gesto(x, y);
+
+    // Define a posição do cursor para exibir o gesto
+    ssd1306_SetCursor(10, 10); // Posição X, Y (ajuste conforme necessário)
+    ssd1306_WriteString("Gesto:", Font_7x10, White);
+
+    // Exibe o gesto no OLED
+    Direction gesto = identificar_gesto();
+    switch (gesto) {
+        case GESTO_VOLTA_COMPLETA:
+            ssd1306_SetCursor(10, 25); // Posição X, Y (ajuste conforme necessário)
+            ssd1306_WriteString("Volta completa", Font_7x10, White);
+            break;
+        case GESTO_MEIA_LUA_DIREITA:
+            ssd1306_SetCursor(10, 25); // Posição X, Y (ajuste conforme necessário)
+            ssd1306_WriteString("Meia-Dir", Font_7x10, White);
+            break;
+        case GESTO_MEIA_LUA_ESQUERDA:
+            ssd1306_SetCursor(10, 25); // Posição X, Y (ajuste conforme necessário)
+            ssd1306_WriteString("Meia-lua Esq", Font_7x10, White);
+            break;
+        default:
+            ssd1306_SetCursor(10, 25); // Posição X, Y (ajuste conforme necessário)
+            ssd1306_WriteString("Nenhum gesto detectado", Font_7x10, White);
+            break;
+    }
+
+    ssd1306_UpdateScreen();  // Atualiza o display
+}
 // Função para tratar o botão A
 void menu_handle_button_a(int x, int y, bool estado_inverter) {
     if (exibindo_funcao) {
@@ -231,12 +285,15 @@ void menu_handle_button_a(int x, int y, bool estado_inverter) {
                 switch (selected_option) {
                     case 0: // Direcoes
                         display_directions(x, y, estado_inverter);
+                        printf("Mostrando Direcoes:");
                         break;
                     case 1: // Porcentagens
                         display_percentages(x, y);
+                        printf("Mostrando Porcentagens:");
                         break;
                     case 2: // Gestos
                         display_gestures(x, y);
+                        printf("Mostrando gestos:");
                         break;
                     default:
                         break;
@@ -260,10 +317,7 @@ void menu_handle_button_a(int x, int y, bool estado_inverter) {
             }
         }
     } else {
-        // Se estiver no menu principal, entra no submenu correspondente
-        in_sub_menu = true;
-
-        // Verifica qual opção do menu principal foi selecionada
+        // Se estiver no menu principal, entra no submenu correspondente ou executa testes automatizados
         int selected_main_option = menu_get_selected_option();
         printf("Opção selecionada no menu principal: %d\n", selected_main_option);
 
@@ -272,13 +326,17 @@ void menu_handle_button_a(int x, int y, bool estado_inverter) {
             printf("Texto da opção selecionada: %s\n", selected_option_text);
 
             if (strcmp(selected_option_text, "Joysticks") == 0) {
+                in_sub_menu = true;
                 is_joysticks_selected = true;  // Entra no submenu de Joysticks
                 printf("Submenu de Joysticks selecionado\n");
                 menu_draw(menu_options_joysticks, NUM_OPTIONS_SUB_1);
             } else if (strcmp(selected_option_text, "Matrix de Leds") == 0) {
+                in_sub_menu = true;
                 is_joysticks_selected = false;  // Entra no submenu de Matrix de Leds
                 printf("Submenu de Matrix de Leds selecionado\n");
                 menu_draw(menu_options_matrix, NUM_OPTIONS_SUB_2);
+            } else if (strcmp(selected_option_text, "Testes Automatizados") == 0) {
+               estado_atual = ESTADO_TESTES_AUTOMATIZADOS;
             } else {
                 printf("Opção desconhecida selecionada\n");
             }
@@ -358,41 +416,6 @@ void display_percentages(int x, int y) {
     char y_str[10];
     snprintf(y_str, sizeof(y_str), "%.2f%%", porcentagem_y);
     ssd1306_WriteString(y_str, Font_7x10, White);
-
-    ssd1306_UpdateScreen();  // Atualiza o display
-}
-
-// Função para exibir os gestos no OLED
-void display_gestures(int x, int y) {
-    ssd1306_Fill(Black);  // Limpa o display
-
-    // Detecta o gesto
-    detectar_gesto(x, y);
-
-    // Define a posição do cursor para exibir o gesto
-    ssd1306_SetCursor(10, 10); // Posição X, Y (ajuste conforme necessário)
-    ssd1306_WriteString("Gesto:", Font_7x10, White);
-
-    // Exibe o gesto no OLED
-    Direction gesto = identificar_gesto();
-    switch (gesto) {
-        case GESTO_VOLTA_COMPLETA:
-            ssd1306_SetCursor(10, 25); // Posição X, Y (ajuste conforme necessário)
-            ssd1306_WriteString("Volta completa", Font_7x10, White);
-            break;
-        case GESTO_MEIA_LUA_DIREITA:
-            ssd1306_SetCursor(10, 25); // Posição X, Y (ajuste conforme necessário)
-            ssd1306_WriteString("Meia-Dir", Font_7x10, White);
-            break;
-        case GESTO_MEIA_LUA_ESQUERDA:
-            ssd1306_SetCursor(10, 25); // Posição X, Y (ajuste conforme necessário)
-            ssd1306_WriteString("Meia-lua Esq", Font_7x10, White);
-            break;
-        default:
-            ssd1306_SetCursor(10, 25); // Posição X, Y (ajuste conforme necessário)
-            ssd1306_WriteString("Nenhum", Font_7x10, White);
-            break;
-    }
 
     ssd1306_UpdateScreen();  // Atualiza o display
 }
