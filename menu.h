@@ -20,7 +20,8 @@ typedef enum {
     ESTADO_MENU_MATRIX,       // Submenu da matriz de LEDs
     ESTADO_EXIBIR_FRASE,      // Exibindo frase
     ESTADO_EXIBIR_ANIMACAO,   // Exibindo animação
-    ESTADO_AJUSTAR_BRILHO     // Ajustando brilho
+    ESTADO_AJUSTAR_BRILHO,
+    ESTADO_TESTES_AUTOMATIZADOS     // Ajustando brilho
 } EstadoSistema;
 
 // Declaração da variável de estado
