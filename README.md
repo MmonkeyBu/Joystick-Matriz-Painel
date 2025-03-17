@@ -35,7 +35,7 @@ Este projeto é uma demonstração da integração entre uma biblioteca de contr
 
 ### 4. **Botões**
    - **Botão A**: Confirma seleção no menu e interage com funcionalidades.
-   - **Botão B**: Entra no modo bootsel para programação do Pico.
+   - **Botão B**: Entra no modo bootsel.
    - **Botão do Joystick**: Inverte os eixos X e Y.
 
 ---
@@ -95,27 +95,27 @@ cp projeto.uf2 /media/seu-usuario/RPI-RP2/
 ```
 ## 🎮 Como Usar
 
-**Navegação no Menu:**
-
+### Navegação no Menu:
 - Use o joystick para navegar entre as opções do menu.
-- Pressione o Botão A para selecionar uma opção.
-- Pressione o Botão do Joystick para inverter os eixos X e Y.
+- Pressione o **Botão A** para selecionar uma opção.
+- Pressione o **Botão do Joystick** para inverter os eixos X e Y.
+- Pressione o **Botão B** para entrar no modo bootsel.
 
-**Exibição de Frases:**
+### Exibição de Frases:
+- No submenu **"Matrix de Leds"**, selecione **"Frase"** para exibir uma frase com efeito de rolagem.
 
-- No submenu "Matrix de Leds", selecione "Frase" para exibir uma frase com efeito de rolagem.
+### Reprodução de Animação:
+- No submenu **"Matrix de Leds"**, selecione **"Animação"** para reproduzir uma animação na matriz de LEDs.
 
-**Reprodução de Animação:**
+### Ajuste de Brilho:
+- No submenu **"Matrix de Leds"**, selecione **"Ajustar Brilho"** e use o joystick para ajustar o brilho dos LEDs.
 
-- No submenu "Matrix de Leds", selecione "Animação" para reproduzir uma animação na matriz de LEDs.
+### Detecção de Gestos:
+- No submenu **"Joysticks"**, selecione **"Gestos"** e movimente o joystick para detectar gestos como **"Volta Completa"** e **"Meia Lua"**.
 
-**Ajuste de Brilho:**
-
-- No submenu "Matrix de Leds", selecione "Ajustar Brilho" e use o joystick para ajustar o brilho dos LEDs.
-
-**Detecção de Gestos:**
-
-- No submenu "Joysticks", selecione "Gestos" e movimente o joystick para detectar gestos como "Volta Completa" e "Meia Lua".
+### Demonstração de Funções:
+- No submenu **"Joysticks"**, selecione **"Demonstração de Funções"** para ver uma demonstração das funcionalidades do joystick.
+- No submenu **"Matrix de Leds"**, selecione **"Demonstração de Funções"** para ver uma demonstração das funcionalidades da matriz de LEDs.
 
 ## 📂 Estrutura do Projeto
 
@@ -141,4 +141,4 @@ BitDogLab: Pelo suporte e recursos para desenvolvimento.
 Colega de Trabalho: Pela biblioteca do joystick.
 
 Feito por Pablo Daniel e Carlos Elias.
-📧 Contato: pablo.vieira@academico.ifpb.edu.br
+📧 Contato: pdnv2005@gmail.com e carloseliasf146@gmail.com
