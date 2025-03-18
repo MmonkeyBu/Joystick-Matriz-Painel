@@ -138,7 +138,5 @@ Contribuições são bem-vindas! Sinta-se à vontade para abrir issues e pull re
 🙏 Agradecimentos
 BitDogLab: Pelo suporte e recursos para desenvolvimento.
 
-Colega de Trabalho: Pela biblioteca do joystick.
-
 Feito por Pablo Daniel e Carlos Elias.
 📧 Contato: pdnv2005@gmail.com e carloseliasf146@gmail.com
