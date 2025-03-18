@@ -90,6 +90,7 @@ int main() {
         switch (estado_atual) {
             case ESTADO_MENU_PRINCIPAL:
             case ESTADO_MENU_MATRIX:
+                exibir_frame(f_01, cor, pio, sm, 1.0);
                 menu_update(x, y, false); // Atualiza o menu com base na direção
                 break;
             case ESTADO_EXIBIR_FRASE:

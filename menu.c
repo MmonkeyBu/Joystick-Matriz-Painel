@@ -207,23 +207,14 @@ void display_animacao() {
     ssd1306_SetCursor(10, 10);
     ssd1306_WriteString("mostrando animação", Font_7x10, White);
     RGBColor cor = {200, 0, 50};
-    double intensidade = 0.1;
-    int velocidade = 500, cont = 0;
-
-    while (cont < 5) {
-        exibir_frame(heart_01, cor, pio, sm, intensidade);
-        sleep_ms(velocidade);
-        exibir_frame(heart_02, cor, pio, sm, intensidade);
-        sleep_ms(velocidade);
-
-        if (!gpio_get(BOTAO_A)) {
-            printf("Botão A pressionado, saindo da animação...\n");
-            break;
-        }
-        cont++;
-    }
-
-    exibir_frame(f_01, cor, pio, sm, intensidade);
+    double intens_1 = 0.1, intens_2 = 0.3;
+    int velocidade = 500;
+    
+    sleep_ms(velocidade);
+    exibir_frame(heart_01, cor, pio, sm, intens_1);
+    sleep_ms(velocidade);
+    exibir_frame(heart_02, cor, pio, sm, intens_2);
+    sleep_ms(velocidade);
 }
 
 // Função para exibir os gestos no OLED
